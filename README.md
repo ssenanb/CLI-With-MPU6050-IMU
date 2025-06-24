@@ -1,7 +1,9 @@
 # CLI-With-MPU6050-IMU
 ->Description
 
-In this project, the STM32 continously reads accelerometer and gyroscope data from the IMU sensor. Since the raw data is often noisy and affected by various environmental factors, an offset calibration is implemented to improve measurement accuracy. The system includes a Command Line Interface (CLI) over UART, allowing the user to interact with the system by sending commands. Through the CLI, the user can:
+In this project, the STM32 continously reads accelerometer and gyroscope data from the IMU sensor. Since the raw data is often noisy and affected by various environmental factors, an offset calibration is implemented to improve measurement accuracy. The system includes a Command Line Interface (CLI) over UART, allowing the user to interact with the system by sending commands. 
+
+This project is designed for developers who want to test, calibrate, and visualize raw IMU sensor data in real-time via a serial CLI. It can be used as a base for motion tracking, robotics, or sensor fusion systems.
 
 -> CLI Commands
 
