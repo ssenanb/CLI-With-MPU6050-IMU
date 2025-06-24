@@ -47,8 +47,8 @@ PA9 -> USART1_TX (with Interrupt)
 
 PA10 -> USART1_RX (with Interrupt)
 
-PB6 -> I2C1_SCL (to the IMU)
+PB6 -> I2C1_SCL (to the IMU SCL)
 
-PB7 -> I2C1_SDA (to the IMU)
+PB7 -> I2C1_SDA (to the IMU SDA)
 
 
