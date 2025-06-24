@@ -1,37 +1,7 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include<stdio.h>
 #include"string.h"
-/* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
 #define MPU6050_ADDR  (0x68 << 1) // sensor address
 #define GYRO_CNFG_REG 0x1B // gyro address
 #define ACC_CNFG_REG  0x1C // acc address
@@ -40,19 +10,11 @@
 #define GYRO_REG_DATA 0x43 // initial addres
 #define SAMPLES		  200
 #define MAX_LEN 	  50 // array size
-/* USER CODE END PD */
 
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef huart1;
 
-/* USER CODE BEGIN PV */
 uint8_t data;
 uint8_t acc_buffer[6], gyro_buffer[6]; // read raw data
 int16_t x_acc, y_acc, z_acc; // raw value
@@ -61,30 +23,20 @@ float x_acc_g, y_acc_g, z_acc_g; // real value
 float x_gyro_dps, y_gyro_dps, z_gyro_dps; // real value
 int32_t x_acc_offset = 0, y_acc_offset = 0, z_acc_offset = 0;
 int32_t x_gyro_offset = 0, y_gyro_offset = 0, z_gyro_offset = 0;
-float gyro_array_x[5];
-float gyro_array_y[5];
-float gyro_array_z[5];
-float acc_array_x[5];
-float acc_array_y[5];
-float acc_array_z[5];
+float gyro_array_x[5], gyro_array_y[5],gyro_array_z[5];
+float acc_array_x[5], acc_array_y[5], acc_array_z[5];
 volatile char rxChar;
 uint8_t rxIndex = 0;
 uint8_t rxBuffer[MAX_LEN];
 uint8_t accBuffer[MAX_LEN], gyroBuffer[MAX_LEN];
 uint8_t data_index = 0;
-/* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart -> Instance == USART1){
 
@@ -153,7 +105,7 @@ void gyroRead(){
 	HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, GYRO_REG_DATA, 1, gyro_buffer, 6, HAL_MAX_DELAY);
 
 	x_gyro = ((int16_t)gyro_buffer[0] << 8) | gyro_buffer[1]; // sum bytes
-    y_gyro = ((int16_t)gyro_buffer[2] << 8) | gyro_buffer[3];
+   	y_gyro = ((int16_t)gyro_buffer[2] << 8) | gyro_buffer[3];
 	z_gyro = ((int16_t)gyro_buffer[4] << 8) | gyro_buffer[5];
 
 
@@ -174,7 +126,6 @@ void gyroRead(){
 
 void calibrateIMU(){
 	 int16_t acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z;
-
 
 	for(int i = 0; i < SAMPLES; i++){
 		HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACC_REG_DATA, 1, acc_buffer, 6, HAL_MAX_DELAY);
@@ -211,6 +162,7 @@ void calibrateIMU(){
 	    z_gyro_offset /= SAMPLES;
 
 }
+
 void lastAcc(){
 	for(int i = 0; i < 4; i++){
 		sprintf(accBuffer, "Ax: %.2f Ay: %.2f Az: %.2f\r\n",acc_array_x[i], acc_array_y[i], acc_array_z[i]);
@@ -224,40 +176,17 @@ void lastGyro(){
 		HAL_UART_Transmit(&huart1, (uint8_t*)gyroBuffer, strlen(gyroBuffer), HAL_MAX_DELAY);
 	}
 }
-/* USER CODE END 0 */
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
+
 int main(void)
 {
-
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
-  /* USER CODE BEGIN 2 */
+
 data = 0x00; // to exit sleep mode and activate the mpu6050 sensor
 HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, REG_USR_CTRL, 1, &data, 1, HAL_MAX_DELAY);
 
@@ -270,26 +199,14 @@ calibrateIMU();
 HAL_UART_Receive_IT(&huart1, (uint8_t *)&rxChar, 1);
 HAL_UART_Transmit(&huart1, (uint8_t*)"CLI Console 1.1.1\r\n", strlen("CLI Console 1.1.1\r\n"), HAL_MAX_DELAY);
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
 	  accRead();
 	  gyroRead();
-
-  /* USER CODE END 3 */
  }
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
