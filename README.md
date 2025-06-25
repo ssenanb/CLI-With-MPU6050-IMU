@@ -1,5 +1,5 @@
 # CLI-With-MPU6050-IMU
-->Description
+## Description
 
 In this project, the STM32 continously reads accelerometer and gyroscope data from the IMU sensor. Since the raw data is often noisy and affected by various environmental factors, an offset calibration is implemented to improve measurement accuracy. The system includes a Command Line Interface (CLI) over UART, allowing the user to interact with the system by sending commands. 
 
@@ -17,7 +17,7 @@ This project is designed for developers who want to test, calibrate, and visuali
   
   > last_acc : retrieve the last 5 accelerometer readings
 
--> Compenents Used
+## Compenents Used
 
 STM32F0DISC
 
@@ -37,7 +37,7 @@ Figure 2 : Output in the Termite
 
 <img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/termite.png" alt="CLI" width="500"/>
 
--> Configuration
+## Configuration
 
 Figure 3 : Confgiuration in the STM32CubeIDE
 
