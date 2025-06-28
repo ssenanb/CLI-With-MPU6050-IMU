@@ -17,7 +17,20 @@ This project is designed for developers who want to test, calibrate, and visuali
   
   > last_acc : retrieve the last 5 accelerometer readings
 
-## Compenents Used
+-> Offset Calibration
+
+- During system startup, the device reads 100 samples from each axis and computes the average.
+- This average is subtracted from subsequent raw values to reduce drift and noise.
+
+## Software Architecture
+
+- The CLI is implemented using UART interrupt handlers. Incoming characters are stored in a buffer.
+- When a newline character is detected, the buffer is parsed to determine the command.
+- The system maintains two circular buffers for storing the last 5 accelerometer and gyroscope readings.
+- I2C communication is handled using STM32 HAL drivers.
+- Data is displayed over UART using `sprintf` and `HAL_UART_Transmit`.
+
+## Components Used
 
 STM32F0DISC
 
@@ -29,9 +42,9 @@ Jumper Cables
 
 Figure 1 : System Overview 
 
-<img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/system_overview.jpeg" alt="System Overwiew" width="500"/>
+<img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/system_overview.jpeg" alt="System Overview" width="500"/>
 
-<img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/sensor_image.jpeg" alt="System Overwiew" width="500"/>
+<img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/sensor_image.jpeg" alt="System Overview" width="500"/>
 
 Figure 2 : Output in the Termite
 
@@ -39,7 +52,7 @@ Figure 2 : Output in the Termite
 
 ## Configuration
 
-Figure 3 : Confgiuration in the STM32CubeIDE
+Figure 3 : Configuration in the STM32CubeIDE
 
 <img src="https://github.com/ssenanb/CLI-With-MPU6050-IMU/blob/main/configuration.png" alt="Configuration" width="500"/>
 
